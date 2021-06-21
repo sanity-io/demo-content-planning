@@ -1,0 +1,52 @@
+.root {
+  --dot-small: 14px;
+  --dot-big: 22px;
+
+  display: grid;
+  grid-template-columns:
+    60px var(--dot-big) 1fr var(--dot-small) 1fr var(--dot-big) 1fr var(
+      --dot-small
+    )
+    1fr var(--dot-big);
+}
+
+.root * {
+  box-sizing: border-box;
+}
+
+.linewrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.line {
+  background-color: #b0e1c2;
+  width: 100%;
+  height: 2px;
+}
+
+.dot,
+.dotbig {
+  border: 2px solid #b0e1c2;
+  background-color: white;
+  border-radius: 500px;
+  width: var(--dot-small);
+  height: var(--dot-small);
+}
+
+.linewrap .dot {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.dot {
+  transform: translateY(calc((var(--dot-big) - var(--dot-small)) / 2));
+}
+
+.dotbig {
+  width: var(--dot-big);
+  height: var(--dot-big);
+}
