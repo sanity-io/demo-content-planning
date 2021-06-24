@@ -16,12 +16,12 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/base": "^2.12.0",
+    "@sanity/base": "^2.12.2",
     "@sanity/components": "^2.2.6",
-    "@sanity/core": "^2.12.0",
-    "@sanity/default-layout": "^2.12.0",
+    "@sanity/core": "^2.12.2",
+    "@sanity/default-layout": "^2.12.2",
     "@sanity/default-login": "^2.11.1",
-    "@sanity/desk-tool": "^2.12.0",
+    "@sanity/desk-tool": "^2.12.2",
     "@sanity/ui": "^0.33.29",
     "@sanity/vision": "^2.11.2",
     "json-diff": "^0.5.4",

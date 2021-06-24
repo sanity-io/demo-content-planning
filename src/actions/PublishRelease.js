@@ -8,7 +8,7 @@ const client = sanityClient.withConfig({apiVersion: `2021-05-19`})
 
 export function PublishRelease(props) {
   const {id, type, draft, published} = props
-  const doc = useMemo(() => draft || published, [])
+  const doc = useMemo(() => draft || published, [draft, published])
   const ops = useDocumentOperation(id, type)
 
   const [isPublishing, setIsPublishing] = useState(false)
@@ -40,7 +40,7 @@ export function PublishRelease(props) {
     disabled: !count,
     icon: FiFlag,
     shortcut: 'mod+shift+p',
-    label: `${isPublishing ? `Releasing...` : `Release`} ${
+    label: `${isPublishing ? `Releasing...` : `${doc?.schedule ? `Schedule` : `Release`}`} ${
       count === 1 ? `1 Article` : `${count} Articles`
     }`,
     onHandle,
