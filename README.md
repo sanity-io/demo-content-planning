@@ -1,4 +1,4 @@
-# Sanity "Git Style" Publishing Exploration
+# Sanity.io Content Planning Demo
 
 Aims to solve:
 

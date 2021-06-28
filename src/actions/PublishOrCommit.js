@@ -2,6 +2,7 @@
 import {useDocumentOperation} from '@sanity/react-hooks'
 import {MdPublish as PublishIcon} from 'react-icons/md'
 import {FiGitCommit} from 'react-icons/fi'
+import DEFAULT_VARIANT from '../lib/defaultVariant'
 
 export function PublishOrCommit(props) {
   const {id, type} = props
@@ -9,10 +10,10 @@ export function PublishOrCommit(props) {
 
   if (type !== 'article') return null
 
-  const branch = props?.draft?.branch ?? props?.published?.branch
+  const variant = props?.draft?.variant ?? props?.published?.variant
 
   const isPublished = !props.draft
-  const shouldPublish = !branch || branch === `main`
+  const shouldPublish = !variant || variant === DEFAULT_VARIANT
 
   // Display 'merge' instead on non-main published Docs
   if (isPublished) return null

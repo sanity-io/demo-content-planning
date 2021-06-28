@@ -5,17 +5,18 @@ import {Stack, Label, Code} from '@sanity/ui'
 
 import Message from '../components/Message'
 import ArticlePreview from '../components/ArticlePreview'
+import DEFAULT_VARIANT from '../lib/defaultVariant'
 
-function BranchLabel({value}) {
+function VariantLabel({value}) {
   return (
     <Stack space={2}>
-      <Label size={1}>Branch</Label>
+      <Label size={1}>Variant</Label>
       <Code>{value}</Code>
     </Stack>
   )
 }
 
-BranchLabel.propTypes = {
+VariantLabel.propTypes = {
   value: PropTypes.string.isRequired,
 }
 
@@ -34,13 +35,13 @@ export default {
   fields: [
     {name: 'message', type: 'text', inputComponent: Message},
     {
-      name: 'branch',
-      title: 'Branch',
+      name: 'variant',
+      title: 'Variant',
       type: 'string',
       readOnly: true,
       hidden: true,
-      initialValue: 'main',
-      // inputComponent: BranchLabel,
+      initialValue: DEFAULT_VARIANT,
+      // inputComponent: VariantLabel,
       // fieldset: 'publishing',
     },
     {
@@ -51,8 +52,7 @@ export default {
       readOnly: true,
       hidden: true,
       // fieldset: 'publishing',
-      description:
-        'This can only be changed by clicking "Go Live" on a Published, main Branch Article.',
+      description: `This can only be changed by clicking "Go Live" on a Published, ${DEFAULT_VARIANT} Variant Article.`,
     },
     {name: 'title', type: 'string'},
     {name: 'content', type: 'text'},
@@ -61,12 +61,12 @@ export default {
     select: {
       _id: '_id',
       title: 'title',
-      branch: 'branch',
+      variant: 'variant',
       live: 'live',
     },
-    prepare: ({_id, title, branch, live}) => ({
+    prepare: ({_id, title, variant, live}) => ({
       title,
-      subtitle: `${branch} ${live ? ` | Live` : ``}`,
+      subtitle: `${variant} ${live ? ` | Live` : ``}`,
       media: <ArticlePreview _id={_id} live={live} />,
     }),
   },

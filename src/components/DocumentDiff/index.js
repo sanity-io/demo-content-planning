@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import {diffString} from 'json-diff'
 import {Box, Button} from '@sanity/ui'
 import {FiGitMerge} from 'react-icons/fi'
 
-export default function DocumentDiff({main, branch, merge}) {
-  const outputString = diffString(main, branch)
+export default function DocumentDiff({main, variant, merge}) {
+  const outputString = diffString(main, variant)
 
   return (
     <>
@@ -26,11 +27,21 @@ export default function DocumentDiff({main, branch, merge}) {
       <Box marginTop={4}>
         <Button
           onClick={merge}
-          text={`Merge "${branch.branch}" into "${main.branch}"`}
+          text={`Merge "${variant.variant}" into "${main.variant}"`}
           tone="positive"
           icon={FiGitMerge}
         />
       </Box>
     </>
   )
+}
+
+DocumentDiff.propTypes = {
+  main: PropTypes.shape({
+    variant: PropTypes.string.isRequired,
+  }).isRequired,
+  merge: PropTypes.func.isRequired,
+  variant: PropTypes.shape({
+    variant: PropTypes.string.isRequired,
+  }).isRequired,
 }

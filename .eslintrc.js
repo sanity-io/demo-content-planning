@@ -17,6 +17,7 @@ module.exports = {
     'prettier/react',
   ],
   rules: {
+    'no-use-before-define': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     'import/no-extraneous-dependencies': 'off', // because of parts
     'import/no-unresolved': ['error', {ignore: ['.*:.*']}], // because of parts
@@ -30,6 +31,12 @@ module.exports = {
       },
     ],
     'sort-imports': 'off', // prefer import/order
+    'react/jsx-no-bind': [
+      1,
+      {
+        ignoreDOMComponents: true,
+      },
+    ],
   },
   plugins: ['import', 'prettier', 'react'],
   overrides: [

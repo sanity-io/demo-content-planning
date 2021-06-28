@@ -2,30 +2,33 @@
 import React, {useState, useMemo} from 'react'
 import {useDocumentOperation} from '@sanity/react-hooks'
 import {FiGitPullRequest} from 'react-icons/fi'
+import {useRouter} from 'part:@sanity/base/router'
 
 import sanityClient from 'part:@sanity/base/client'
 import DocumentDiff from '../components/DocumentDiff'
+import DEFAULT_VARIANT from '../lib/defaultVariant'
 
 const client = sanityClient.withConfig({apiVersion: `2021-05-19`})
 
-export function MergeBranch(props) {
+export function MergeVariant(props) {
+  const router = useRouter()
   const {id, type, draft, published} = props
 
   const {publish} = useDocumentOperation(id, type)
   const [isPublishing, setIsPublishing] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [docMain, setDocMain] = useState({})
-  const docBranch = useMemo(() => draft || published, [draft, published])
-  const isMain = docBranch?.branch === `main`
+  const docVariant = useMemo(() => draft || published, [draft, published])
+  const isMain = docVariant?.variant === DEFAULT_VARIANT
   const [patchDoc, setPatchDoc] = useState({})
 
-  if (!docBranch?.branch || isMain) return null
+  if (!docVariant?.variant || isMain) return null
 
   function onHandle() {
     setIsPublishing(true)
     setDialogOpen(true)
 
-    const docPatched = {...published, branch: 'main'}
+    const docPatched = {...published, variant: DEFAULT_VARIANT}
     delete docPatched._id
 
     setPatchDoc(docPatched)
@@ -42,9 +45,10 @@ export function MergeBranch(props) {
       .patch(mainId)
       .set(newDoc)
       .commit()
-      .then((res) => {
+      .then(() => {
         setIsPublishing(false)
         props.onComplete()
+        return router.navigateIntent('edit', {id: mainId, type: newDoc._type})
       })
   }
 
@@ -53,7 +57,7 @@ export function MergeBranch(props) {
     icon: FiGitPullRequest,
     label: isPublishing ? 'In Progress...' : 'Pull Request',
     title: publish.disabled
-      ? `Diff "${docBranch?.branch}" against "main"`
+      ? `Diff "${docVariant?.variant}" against "${DEFAULT_VARIANT}"`
       : `Commit changes to begin PR`,
     onHandle,
     dialog: dialogOpen && {
@@ -61,7 +65,7 @@ export function MergeBranch(props) {
       content: (
         <DocumentDiff
           main={docMain}
-          branch={docBranch}
+          variant={docVariant}
           merge={() => merge(docMain?._id, patchDoc)}
         />
       ),

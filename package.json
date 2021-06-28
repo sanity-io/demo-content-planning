@@ -1,16 +1,22 @@
 {
-  "name": "sanitybranchpublish",
+  "name": "demo-content-planning",
   "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "package.json",
-  "author": "Simeon Griggs <simeon@sanity.io>",
+  "author": "Sanity.io <hello@sanity.io>",
   "license": "UNLICENSED",
   "scripts": {
     "start": "sanity start",
     "build": "sanity build",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "postinstall": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint:fix"
+    }
   },
   "keywords": [
     "sanity"
@@ -24,8 +30,10 @@
     "@sanity/desk-tool": "^2.12.2",
     "@sanity/ui": "^0.33.29",
     "@sanity/vision": "^2.11.2",
+    "husky": "^5.0.9",
     "json-diff": "^0.5.4",
     "nanoid": "^3.1.23",
+    "prettier": "^2.3.0",
     "postcss": "^8.3.5",
     "prop-types": "^15.7",
     "react": "^17.0",

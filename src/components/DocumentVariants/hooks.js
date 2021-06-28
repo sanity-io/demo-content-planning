@@ -24,6 +24,7 @@ export const useDocuments = (id, query) => {
     }
 
     return () => (subscription ? subscription.unsubscribe() : null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return documents || []

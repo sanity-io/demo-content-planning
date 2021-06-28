@@ -1,7 +1,8 @@
 import S from '@sanity/desk-tool/structure-builder'
 import {FiFileText} from 'react-icons/fi'
+import DEFAULT_VARIANT from './lib/defaultVariant'
 
-import DocumentBranches from './components/DocumentBranches'
+import DocumentVariants from './components/DocumentVariants'
 
 export default () => {
   return S.list()
@@ -15,12 +16,12 @@ export default () => {
         .child(
           S.documentTypeList(`article`)
             .title('Articles')
-            .filter('branch == "main"')
+            .filter(`variant == "${DEFAULT_VARIANT}"`)
             .child((id) =>
               S.document()
                 .schemaType(`article`)
                 .documentId(id)
-                .views([S.view.form(), S.view.component(DocumentBranches).title(`Branches`)])
+                .views([S.view.form(), S.view.component(DocumentVariants).title(`Variants`)])
             )
         ),
       S.documentTypeListItem('release').title('Releases'),
