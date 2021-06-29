@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-bind */
-import React, {useState, useMemo} from 'react'
+import React, {useState, useEffect, useMemo} from 'react'
 import {useDocumentOperation} from '@sanity/react-hooks'
 import {FiGitPullRequest} from 'react-icons/fi'
 import {useRouter} from 'part:@sanity/base/router'
@@ -10,9 +10,8 @@ import DEFAULT_VARIANT from '../lib/defaultVariant'
 
 const client = sanityClient.withConfig({apiVersion: `2021-05-19`})
 
-export function MergeVariant(props) {
+export function MergeVariant({id, type, draft, published, onComplete}) {
   const router = useRouter()
-  const {id, type, draft, published} = props
 
   const {publish} = useDocumentOperation(id, type)
   const [isPublishing, setIsPublishing] = useState(false)
@@ -21,6 +20,22 @@ export function MergeVariant(props) {
   const docVariant = useMemo(() => draft || published, [draft, published])
   const isMain = docVariant?.variant === DEFAULT_VARIANT
   const [patchDoc, setPatchDoc] = useState({})
+
+  function keyHandler(e) {
+    if (e.key === 'Escape') {
+      setDialogOpen(false)
+      onComplete()
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keyup', keyHandler)
+
+    return () => {
+      window.removeEventListener('keyup', keyHandler)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (!docVariant?.variant || isMain) return null
 
@@ -47,18 +62,22 @@ export function MergeVariant(props) {
       .commit()
       .then(() => {
         setIsPublishing(false)
-        props.onComplete()
-        return router.navigateIntent('edit', {id: mainId, type: newDoc._type})
+        onComplete()
+
+        return router.navigateIntent('edit', {
+          id: mainId,
+          type: newDoc._type,
+        })
       })
   }
 
   return {
     disabled: !publish.disabled,
     icon: FiGitPullRequest,
-    label: isPublishing ? 'In Progress...' : 'Pull Request',
+    label: isPublishing ? 'In Progress...' : 'Begin Merge',
     title: publish.disabled
-      ? `Diff "${docVariant?.variant}" against "${DEFAULT_VARIANT}"`
-      : `Commit changes to begin PR`,
+      ? `Compare "${docVariant?.variant}" to "${DEFAULT_VARIANT}"`
+      : `Publish Variant to Begin Merge`,
     onHandle,
     dialog: dialogOpen && {
       type: 'modal',
@@ -69,6 +88,7 @@ export function MergeVariant(props) {
           merge={() => merge(docMain?._id, patchDoc)}
         />
       ),
+      onClose: () => onComplete(),
     },
   }
 }

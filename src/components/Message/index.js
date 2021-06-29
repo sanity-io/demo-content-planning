@@ -33,8 +33,8 @@ const Message = React.forwardRef(({document}, ref) => {
       icon: <FiFile />,
       message: (
         <>
-          This <code>{variant}</code> Variant Document is a <strong>Draft</strong>, but has been
-          Published before. Unless <strong>Unpublished</strong> it can be Referenced. Until
+          This is the <code>{variant}</code> Document, currently <strong>Draft</strong>, but has
+          been Published before. Unless <strong>Unpublished</strong> it can be Referenced. Until
           Published again its current content cannot be queried publicly outside of the Studio.
         </>
       ),
@@ -45,8 +45,8 @@ const Message = React.forwardRef(({document}, ref) => {
       icon: <FiFileText />,
       message: (
         <>
-          This <code>{variant}</code> Variant Document is <strong>Published</strong>. It can be{' '}
-          <strong>Referenced</strong> by other Documents in the Dataset. You can create{' '}
+          This is the <code>{variant}</code> Document, currently <strong>Published</strong>. It can
+          be <strong>Referenced</strong> by other Documents in the Dataset. You can create{' '}
           <strong>Variants</strong> of it. Custom Access Rules on this Dataset prevent it from being
           queried publicly outside of the Studio until <strong>Live</strong>.
         </>

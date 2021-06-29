@@ -1,22 +1,24 @@
 /* eslint-disable react/jsx-no-bind */
 import React, {useState, useEffect} from 'react'
-import {FiGitBranch} from 'react-icons/fi'
 import {nanoid} from 'nanoid'
-import {Grid, Label, TextInput, Button, Flex} from '@sanity/ui'
+import {FiGitBranch} from 'react-icons/fi'
+
 import {useRouter} from 'part:@sanity/base/router'
 import sanityClient from 'part:@sanity/base/client'
+
+import CreateVariantInput from '../components/CreateVariantInput'
 import DEFAULT_VARIANT from '../lib/defaultVariant'
 
 const client = sanityClient.withConfig({apiVersion: `2021-05-19`})
 
-export function CreateVariant(props) {
+export function CreateVariant({id, type, draft, published, onComplete}) {
   const router = useRouter()
-  const {id, type, draft, published} = props
   const doc = draft || published
 
   const [isPublishing, setIsPublishing] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [value, setValue] = useState(``)
+  const [validity, setValidity] = useState(``)
 
   useEffect(() => {
     if (isPublishing && !draft) {
@@ -27,11 +29,26 @@ export function CreateVariant(props) {
 
   if (doc?.variant !== DEFAULT_VARIANT) return null
 
-  function createVariant() {
+  async function createVariant() {
     setIsPublishing(true)
 
-    const originalDoc = props.draft ?? props.published
-    const newVariantId = [id, nanoid().slice(0, 10)].join(`.`)
+    if (!value) {
+      return setIsPublishing(false)
+    }
+
+    // Check first for other Variants with this name
+    const conflictingVariants = await client.fetch(`*[_id in path($id) && variant == $name]`, {
+      id: `${id}.*`,
+      name: value,
+    })
+
+    // Warn user and do not proceed
+    if (conflictingVariants?.length) {
+      return setValidity(`A Variant with the name "${value}" already exists`)
+    }
+
+    const newVariantId = [id, nanoid().toLowerCase().slice(0, 10)].join(`.`)
+    const originalDoc = draft ?? published
 
     const variantDoc = {
       ...originalDoc,
@@ -40,7 +57,7 @@ export function CreateVariant(props) {
       live: false,
     }
 
-    client
+    return client
       .create(variantDoc)
       .then(() => {
         setIsPublishing(false)
@@ -52,27 +69,28 @@ export function CreateVariant(props) {
       })
   }
 
+  function handleChange(e) {
+    // Update input
+    setValue(e.currentTarget.value)
+
+    // Reset validity on key change
+    if (validity) setValidity(``)
+  }
+
   return {
     disabled: published?.variant !== DEFAULT_VARIANT,
-    label: isPublishing ? 'Forking...' : 'Create Variant',
+    label: isPublishing ? 'Creating...' : 'Create Variant',
     dialog: dialogOpen && {
       type: 'modal',
       content: (
-        <Grid gap={2}>
-          <Label>Variant Name</Label>
-          <Flex>
-            <TextInput onChange={(event) => setValue(event.currentTarget.value)} value={value} />
-            <Button
-              padding={2}
-              tone="positive"
-              icon={FiGitBranch}
-              onClick={() => createVariant()}
-              text="Create"
-            />
-          </Flex>
-        </Grid>
+        <CreateVariantInput
+          value={value}
+          validity={validity}
+          onChange={handleChange}
+          onClick={() => createVariant()}
+        />
       ),
-      onClose: props.onComplete,
+      onClose: () => onComplete(),
     },
     onHandle: () => {
       setDialogOpen(true)

@@ -30,7 +30,7 @@ function DocumentVariants({document: sanityDocument}) {
           </IntentLink>
         ))
       ) : (
-        <Box padding={3}>
+        <Box padding={4}>
           <Text>This document has no Variants</Text>
         </Box>
       )}

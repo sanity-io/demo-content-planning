@@ -13,7 +13,7 @@ export function PublishOrCommit(props) {
   const variant = props?.draft?.variant ?? props?.published?.variant
 
   const isPublished = !props.draft
-  const shouldPublish = !variant || variant === DEFAULT_VARIANT
+  const isMain = !variant || variant === DEFAULT_VARIANT
 
   // Display 'merge' instead on non-main published Docs
   if (isPublished) return null
@@ -30,9 +30,9 @@ export function PublishOrCommit(props) {
 
   return {
     disabled: ops.publish.disabled,
-    icon: shouldPublish ? PublishIcon : FiGitCommit,
+    icon: isMain ? PublishIcon : FiGitCommit,
     shortcut: 'mod+shift+p',
-    label: shouldPublish ? 'Publish' : `Commit`,
+    label: isMain ? 'Publish' : 'Prepare to Merge',
     onHandle,
   }
 }

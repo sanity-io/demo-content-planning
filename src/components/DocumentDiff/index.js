@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import {diffString} from 'json-diff'
-import {Box, Button} from '@sanity/ui'
-import {FiGitMerge} from 'react-icons/fi'
+import {Flex, Button} from '@sanity/ui'
+import {FiGitMerge, FiX} from 'react-icons/fi'
 
 export default function DocumentDiff({main, variant, merge}) {
+  console.log({main, variant})
   const outputString = diffString(main, variant)
 
   return (
@@ -24,14 +25,14 @@ export default function DocumentDiff({main, variant, merge}) {
             {line}
           </code>
         ))}
-      <Box marginTop={4}>
+      <Flex marginTop={4} justify="space-between">
         <Button
           onClick={merge}
           text={`Merge "${variant.variant}" into "${main.variant}"`}
           tone="positive"
           icon={FiGitMerge}
         />
-      </Box>
+      </Flex>
     </>
   )
 }

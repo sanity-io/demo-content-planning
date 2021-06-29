@@ -25,13 +25,15 @@ export default {
   title: 'Article',
   type: 'document',
   icon: FiFileText,
-  // fieldsets: [
-  //   {
-  //     name: 'publishing',
-  //     title: 'Publishing',
-  //     options: {columns: 2},
-  //   },
-  // ],
+  validation: (Rule) =>
+    Rule.custom((fields) => {
+      // This should be an impossible state for the Document to reach
+      if (fields.variant !== DEFAULT_VARIANT && fields.live === true) {
+        return `Only the "${DEFAULT_VARIANT}" Document can be Live`
+      }
+
+      return true
+    }),
   fields: [
     {name: 'message', type: 'text', inputComponent: Message},
     {
@@ -39,10 +41,10 @@ export default {
       title: 'Variant',
       type: 'string',
       readOnly: true,
-      hidden: true,
+      validation: (Rule) => Rule.required(),
       initialValue: DEFAULT_VARIANT,
+      hidden: true,
       // inputComponent: VariantLabel,
-      // fieldset: 'publishing',
     },
     {
       name: 'live',
@@ -50,9 +52,8 @@ export default {
       type: 'boolean',
       initialValue: false,
       readOnly: true,
+      description: `This can only be changed by clicking "Make Live" on a Published, ${DEFAULT_VARIANT} Variant Article.`,
       hidden: true,
-      // fieldset: 'publishing',
-      description: `This can only be changed by clicking "Go Live" on a Published, ${DEFAULT_VARIANT} Variant Article.`,
     },
     {name: 'title', type: 'string'},
     {name: 'content', type: 'text'},
