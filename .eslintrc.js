@@ -15,6 +15,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'prettier',
     'prettier/react',
+    'next',
   ],
   rules: {
     'no-use-before-define': 'off',
@@ -37,6 +38,7 @@ module.exports = {
         ignoreDOMComponents: true,
       },
     ],
+    'react/forbid-prop-types': [0],
   },
   plugins: ['import', 'prettier', 'react'],
   overrides: [

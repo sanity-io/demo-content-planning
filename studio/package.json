@@ -1,0 +1,65 @@
+{
+  "name": "demo-content-planning",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "package.json",
+  "author": "Sanity.io <hello@sanity.io>",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "sanity start",
+    "build": "sanity build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint:fix"
+    }
+  },
+  "keywords": [
+    "sanity"
+  ],
+  "dependencies": {
+    "@sanity/base": "^2.12.2",
+    "@sanity/client": "^2.11.0",
+    "@sanity/components": "^2.2.6",
+    "@sanity/core": "^2.12.2",
+    "@sanity/default-layout": "^2.12.2",
+    "@sanity/default-login": "^2.11.1",
+    "@sanity/desk-tool": "^2.12.2",
+    "@sanity/rich-date-input": "^2.0.9",
+    "@sanity/ui": "^0.33.29",
+    "@sanity/vision": "^2.11.2",
+    "husky": "^5.0.9",
+    "json-diff": "^0.5.4",
+    "nanoid": "^3.1.23",
+    "postcss": "^8.3.5",
+    "prettier": "^2.3.0",
+    "prop-types": "^15.7",
+    "react": "^17.0",
+    "react-diff-view": "^2.4.7",
+    "react-dom": "^17.0",
+    "react-icons": "^4.2.0",
+    "sanity-plugin-documents-pane": "^1.0.5",
+    "sanity-plugin-iframe-pane": "^1.0.5",
+    "typescript": "^4.3.4",
+    "uuid": "^3.4.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "@typescript-eslint/parser": "^4.1.0",
+    "autoprefixer": "^10.2.4",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.8.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-sanity": "^5.0.0",
+    "eslint-import-resolver-webpack": "^0.11.1",
+    "eslint-plugin-cypress": "^2.11.2",
+    "eslint-plugin-es5": "^1.4.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.2"
+  }
+}
