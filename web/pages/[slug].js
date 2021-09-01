@@ -31,7 +31,7 @@ export default function Article({data, preview}) {
 
   const [variantOptions, setVariantOptions] = useState([DEFAULT_VARIANT])
   const [variantSelected, setVariantSelected] = useState(DEFAULT_VARIANT)
-  const [articleDisplayed, setArticleDisplayed] = useState(article)
+  const [articleDisplayed, setArticleDisplayed] = useState(article ?? data?.article)
 
   function handleSelect(value) {
     setVariantSelected(value)
@@ -72,9 +72,11 @@ export default function Article({data, preview}) {
     return []
   }, [article, articleDisplayed])
 
-  if ((!router.isFallback && !data?.article?.slug) || !articleDisplayed) {
-    return <ErrorPage statusCode={404} />
-  }
+  // if (!router.isFallback) {
+  //   return <ErrorPage statusCode={404} />
+  // }
+
+  if (!data || !articleDisplayed?.title) return null
 
   const {title} = articleDisplayed
 
