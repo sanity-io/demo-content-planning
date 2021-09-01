@@ -24,9 +24,9 @@ export default function Article({data, preview}) {
   const router = useRouter()
 
   const {data: article} = usePreviewSubscription(articleQuery, {
-    params: data.queryParams,
-    initialData: data.article,
-    enabled: preview && data.article?.slug,
+    params: data?.queryParams,
+    initialData: data?.article,
+    enabled: preview && data?.article?.slug,
   })
 
   const [variantOptions, setVariantOptions] = useState([DEFAULT_VARIANT])
@@ -57,7 +57,7 @@ export default function Article({data, preview}) {
 
   // Create new paragraph keys
   const content = useMemo(() => {
-    const paragraphData = articleDisplayed?.content ?? article.content
+    const paragraphData = articleDisplayed?.content ?? article?.content
 
     if (paragraphData) {
       return paragraphData
@@ -72,7 +72,7 @@ export default function Article({data, preview}) {
     return []
   }, [article, articleDisplayed])
 
-  if (!router.isFallback && !data.article?.slug) {
+  if ((!router.isFallback && !data?.article?.slug) || !articleDisplayed) {
     return <ErrorPage statusCode={404} />
   }
 
