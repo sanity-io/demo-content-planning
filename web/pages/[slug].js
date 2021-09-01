@@ -72,9 +72,9 @@ export default function Article({data, preview}) {
     return []
   }, [article, articleDisplayed])
 
-  if (!router.isFallback) {
-    return <ErrorPage statusCode={404} />
-  }
+  // if (!router.isFallback) {
+  //   return <ErrorPage statusCode={404} />
+  // }
 
   if (!data || !articleDisplayed?.title) return null
 
