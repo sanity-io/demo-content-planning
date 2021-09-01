@@ -2,7 +2,7 @@ import sanityClient from 'part:@sanity/base/client'
 import DEFAULT_VARIANT from './defaultVariant'
 
 const previewSecret = `p2avlffp4eg3urdg9s2wxotyoln97bq5azb6`
-const remoteUrl = `https://candicorp.sanity.build`
+const remoteUrl = `https://demo-content-planning.sanity.build`
 const localUrl = `http://localhost:3000`
 
 const client = sanityClient.withConfig({apiVersion: `2021-05-19`})
