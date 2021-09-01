@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+/* eslint-disable react/prop-types */
 import React, {useState, useEffect} from 'react'
 import {FormField} from '@sanity/base/components'
 import {Select} from '@sanity/ui'
@@ -30,7 +30,7 @@ const VariantSelector = React.forwardRef((props, ref) => {
   const [details, setDetails] = useState(defaultDetails)
   const variantRef = sanityDocument?.variantSelector?.article?._ref
 
-  console.log({focusPath, props, ref: ref?.current})
+  // console.log({focusPath, props, ref: ref?.current})
 
   // Handle a change to the reference
   useEffect(() => {
@@ -92,22 +92,6 @@ const VariantSelector = React.forwardRef((props, ref) => {
     </FormField>
   )
 })
-
-VariantSelector.propTypes = {
-  compareValue: PropTypes.any,
-  markers: PropTypes.any,
-  onBlur: PropTypes.func,
-  onChange: PropTypes.func,
-  onFocus: PropTypes.func,
-  placeholder: PropTypes.string,
-  presence: PropTypes.any,
-  readOnly: PropTypes.bool,
-  type: PropTypes.shape({
-    description: PropTypes.string,
-    title: PropTypes.string,
-  }),
-  value: PropTypes.string,
-}
 
 VariantSelector.displayName = 'VariantSelector'
 

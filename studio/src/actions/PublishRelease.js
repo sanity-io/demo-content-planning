@@ -45,7 +45,7 @@ export function PublishRelease(props) {
       .then((data) => {
         setIsPublishing(false)
 
-        console.log(data)
+        // console.log(data)
       })
       .catch((err) => console.error(err))
   }

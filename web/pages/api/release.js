@@ -64,7 +64,7 @@ export default async function release(req, res) {
       .set({log: log ? log + newLog : newLog})
       .commit()
       .then((clientResponse) => {
-        console.log(clientResponse, log)
+        // console.log(clientResponse, log)
       })
       .catch((err) => {
         console.error('Oh no, the update failed: ', err.message)
@@ -112,13 +112,13 @@ export default async function release(req, res) {
     await transaction
       .commit()
       .then((transactionResponse) => {
-        console.log(`Transaction Complete `, transactionResponse)
+        // console.log(`Transaction Complete `, transactionResponse)
         results = res?.results
       })
       .catch((err) => console.error(`Transaction Errors `, err))
   }
 
-  console.log(query, params)
+  // console.log(query, params)
 
   res.status(200).json({message: `All done!`, results})
 }
