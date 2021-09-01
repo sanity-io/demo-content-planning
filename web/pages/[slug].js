@@ -72,9 +72,9 @@ export default function Article({data, preview}) {
     return []
   }, [article, articleDisplayed])
 
-  // if (!router.isFallback) {
-  //   return <ErrorPage statusCode={404} />
-  // }
+  if (!router.isFallback) {
+    return <ErrorPage statusCode={404} />
+  }
 
   if (!data || !articleDisplayed?.title) return null
 
@@ -125,7 +125,7 @@ export default function Article({data, preview}) {
   )
 }
 
-export async function getStaticProps({params, preview = true}) {
+export async function getStaticProps({params, preview = false}) {
   const queryParams = {
     slug: params.slug,
     default: DEFAULT_VARIANT, // Ensures we're only querying for the Main document
