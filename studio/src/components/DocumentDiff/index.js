@@ -2,10 +2,10 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import {diffString} from 'json-diff'
 import {Flex, Button} from '@sanity/ui'
-import {FiGitMerge, FiX} from 'react-icons/fi'
+import {FiGitMerge} from 'react-icons/fi'
 
 export default function DocumentDiff({main, variant, merge}) {
-  console.log({main, variant})
+  // console.log({main, variant})
   const outputString = diffString(main, variant)
 
   return (

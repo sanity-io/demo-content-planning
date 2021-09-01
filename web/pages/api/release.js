@@ -2,6 +2,8 @@ import {isFuture} from 'date-fns'
 import sanityClient from '@sanity/client'
 import {Repeater} from 'repeaterdev-js'
 
+import DEFAULT_VARIANT from '../../../studio/src/lib/defaultVariant'
+
 const client = sanityClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
@@ -12,7 +14,7 @@ const client = sanityClient({
 
 const repeater = new Repeater(process.env.REPEATER_TOKEN)
 
-export default async (req, res) => {
+export default async function release(req, res) {
   const corsOrigin =
     process.env.NODE_ENV === 'development'
       ? `http://localhost:3333`
@@ -25,10 +27,12 @@ export default async (req, res) => {
     return
   }
 
-  const {_id, title, schedule} = typeof req?.body === 'string' ? JSON.parse(req.body) : req?.body
+  const {_id, title, schedule, log} =
+    typeof req?.body === 'string' ? JSON.parse(req.body) : req?.body
 
   if (!_id) {
-    return res.status(200).json({message: `No _id provided`})
+    res.status(200).json({message: `No _id provided`})
+    return
   }
 
   // 1. Check for future Schedule date
@@ -40,8 +44,6 @@ export default async (req, res) => {
       req.url,
     ].join('')
 
-    console.log({endpoint})
-
     await repeater.enqueueOrUpdate({
       name: _id,
       endpoint,
@@ -51,20 +53,26 @@ export default async (req, res) => {
       json: {_id},
     })
 
-    const log = `[${new Date().toString()}]:\n${title ?? _id}\nScheduled for ${schedule}`
+    const newLog = [
+      `[${new Date().toString()}]:`,
+      `${title ?? _id}`,
+      `Scheduled for ${schedule}`,
+    ].join('\n')
 
     await client
       .patch(_id)
-      .set({log})
+      .set({log: log ? log + newLog : newLog})
       .commit()
-      .then((release) => {
-        console.log(release, log)
+      .then((clientResponse) => {
+        console.log(clientResponse, log)
       })
       .catch((err) => {
         console.error('Oh no, the update failed: ', err.message)
       })
 
-    return res.status(200).json({message: `Scheduled for ${schedule}`})
+    res.status(200).json({message: `Scheduled for ${schedule}`})
+
+    return
   }
 
   // 2. Otherwise, get all the articles attached to this release
@@ -81,9 +89,13 @@ export default async (req, res) => {
 
     articles.forEach(({article}) => {
       const mainId = article._id.split('.')[0]
-      logItems.push(
-        `[${new Date().toString()}]:\n${mainId}\nMerged "${article.variant}" into "main"`
-      )
+      const lines = [
+        `[${new Date().toString()}]:`,
+        mainId,
+        article.title,
+        `Merged Variant "${article.variant}" into "${DEFAULT_VARIANT}"`,
+      ]
+      logItems.push(lines.join('\n'))
 
       transaction.createOrReplace({
         ...article,
@@ -93,12 +105,14 @@ export default async (req, res) => {
       })
     })
 
-    transaction.patch(_id, (p) => p.set({log: logItems.join('\n\n')}))
+    const newLog = logItems.join('\n\n')
+
+    transaction.patch(_id, (p) => p.set({log: log ? `${newLog}\n\n${log}` : newLog}))
 
     await transaction
       .commit()
-      .then((res) => {
-        console.log(`Transaction Complete `, res)
+      .then((transactionResponse) => {
+        console.log(`Transaction Complete `, transactionResponse)
         results = res?.results
       })
       .catch((err) => console.error(`Transaction Errors `, err))
@@ -106,5 +120,5 @@ export default async (req, res) => {
 
   console.log(query, params)
 
-  return res.status(200).json({message: `All done!`, results})
+  res.status(200).json({message: `All done!`, results})
 }

@@ -1,6 +1,13 @@
+import {groq} from 'next-sanity'
 import Head from 'next/head'
+import Link from 'next/link'
 
-export default function Home() {
+import {getClient} from '../lib/sanity.server'
+import DEFAULT_VARIANT from '../../studio/src/lib/defaultVariant'
+
+export default function Home({data}) {
+  const {articles} = data
+
   return (
     <div>
       <Head>
@@ -9,7 +16,39 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>Main!</main>
+      <main className="grid grid-cols-1 divide-y divide-gray-100">
+        {articles?.length > 0 &&
+          articles.map((article) => (
+            <article key={article._id} className="p-4">
+              <Link href={`/${article.slug}`}>
+                <a className="block font-bold hover:text-pink-500">{article.title}</a>
+              </Link>
+              {article?.variants > 0 && (
+                <span className="text-sm">
+                  {article?.variants === 1 ? `1 Variant` : `${article?.variants} Variants`}
+                </span>
+              )}
+            </article>
+          ))}
+      </main>
     </div>
   )
+}
+
+export async function getStaticProps({params, preview = true}) {
+  const query = groq`*[_type == "article" && variant == $default && defined(slug)]{
+    _id,
+    title,
+    "slug": slug.current,
+    "variants": count(*[_id in path(^._id + ".*")])
+  }`
+  const queryParams = {default: DEFAULT_VARIANT}
+  const articles = await getClient(preview).fetch(query, queryParams)
+
+  return {
+    props: {
+      preview,
+      data: {articles},
+    },
+  }
 }

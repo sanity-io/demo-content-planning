@@ -1,25 +1,11 @@
 import React from 'react'
-import ArticleAndVariant from '../../components/ArticleAndVariant'
 import ArticlePreview from '../../components/ArticlePreview'
-import VariantSelector from '../../components/VariantSelector'
 import DEFAULT_VARIANT from '../../lib/defaultVariant'
 
 export default {
   name: 'variantSelector',
   title: 'Variant Selector',
   type: 'object',
-  // fieldsets: [
-  //   {
-  //     name: 'articleAndVariant',
-  //     title: 'Article and Variant',
-  //     options: {
-  //       collapsible: false,
-  //       collapsed: false,
-  //       // columns: 2
-  //     },
-  //   },
-  // ],
-  // inputComponent: ArticleAndVariant,
   fields: [
     {
       name: 'article',
@@ -32,17 +18,6 @@ export default {
         filter: `!live`,
       },
     },
-    // {
-    //   name: 'variant',
-    //   title: 'Variant',
-    //   type: 'string',
-    //   fieldset: 'articleAndVariant',
-    //   options: {
-    //     list: ['one', 'two', 'three'],
-    //     layout: 'radio',
-    //   },
-    //   inputComponent: VariantSelector,
-    // },
   ],
   preview: {
     select: {

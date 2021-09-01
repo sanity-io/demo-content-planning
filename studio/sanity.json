@@ -38,6 +38,10 @@
     {
       "implements": "part:@sanity/base/document-badges/resolver",
       "path": "./src/badges/resolveDocumentBadges.js"
+    },
+    {
+      "implements": "part:@sanity/base/theme/variables/override-style",
+      "path": "./src/variableOverrides.css"
     }
   ]
 }

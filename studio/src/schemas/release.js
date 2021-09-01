@@ -26,9 +26,17 @@ export default {
       name: 'articles',
       title: 'Articles',
       type: 'array',
-      description: `When Released each Article will be merged into "${DEFAULT_VARIANT}" and set Live. Articles which are already Live cannot be added here.`,
+      description: `Select Articles to be merged into "${DEFAULT_VARIANT}" and set Live. Articles which are already Live cannot be added here.`,
       // Had an idea for a two-step selector but it's more work than its worth
       // Also, a weak ref might not be a good idea anyway...
+      of: [{type: 'variantSelector'}],
+    },
+    {
+      name: 'released',
+      title: 'Released Articles',
+      readOnly: true,
+      type: 'array',
+      description: `The Release function updates this field.`,
       of: [{type: 'variantSelector'}],
     },
     {
@@ -39,4 +47,17 @@ export default {
       readOnly: true,
     },
   ],
+  preview: {
+    select: {
+      title: 'title',
+      schedule: 'schedule',
+      count: 'articles.length',
+    },
+    prepare({title, schedule, count}) {
+      return {
+        title,
+        subtitle: `${count} Articles | ${schedule}`,
+      }
+    },
+  },
 }

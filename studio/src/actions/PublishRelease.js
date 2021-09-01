@@ -3,6 +3,10 @@ import {useMemo, useEffect, useState} from 'react'
 import {useDocumentOperation} from '@sanity/react-hooks'
 import {FiFlag} from 'react-icons/fi'
 
+const remoteUrl = `https://demo-content-planning.sanity.build`
+const localUrl = `http://localhost:3000`
+const baseUrl = window.location.hostname === 'localhost' ? localUrl : remoteUrl
+
 export function PublishRelease(props) {
   const {id, type, draft, published, onComplete} = props
   const doc = useMemo(() => draft || published, [draft, published])
@@ -27,21 +31,21 @@ export function PublishRelease(props) {
   async function release() {
     if (!doc?.articles?.length) return
 
-    const {_id, title, schedule} = doc
+    const {_id, title, schedule, log} = doc
 
     // Merging these documents _could_ be done here in Sanity Studio
     // But it made sense to use the Serverless Function
     // To test that it works on-demand and on-schedule
-    await fetch(`http://localhost:3000/api/release`, {
+    await fetch(`${baseUrl}/api/release`, {
       method: 'POST',
       // Because of CORS, this has to be a string from the Studio
-      body: JSON.stringify({_id, title, schedule}),
+      body: JSON.stringify({_id, title, schedule, log}),
     })
-      .then((res) => res.json())
-      .then((res) => {
+      .then((data) => data.json())
+      .then((data) => {
         setIsPublishing(false)
 
-        console.log(res)
+        console.log(data)
       })
       .catch((err) => console.error(err))
   }

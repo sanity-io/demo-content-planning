@@ -1,11 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {FiFileText} from 'react-icons/fi'
+import client from 'part:@sanity/base/client'
 import {Stack, Label, Code} from '@sanity/ui'
 
 import Message from '../components/Message'
 import ArticlePreview from '../components/ArticlePreview'
 import DEFAULT_VARIANT from '../lib/defaultVariant'
+
+export function isUniqueToDefaultDocuments(slug, options) {
+  const {document} = options
+
+  const id = document._id.replace(/^drafts\./, '')
+  const params = {
+    type: document._type,
+    draft: `drafts.${id}`,
+    published: id,
+    slug,
+  }
+
+  const query = `!defined(*[
+    !(_id in [$draft, $published]) && 
+    _type == $type && 
+    variant != ^.variant && 
+    slug.current == $slug
+  ][0]._id)`
+
+  return client.fetch(query, params)
+}
 
 function VariantLabel({value}) {
   return (
@@ -60,7 +82,7 @@ export default {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {source: 'title'},
+      options: {source: 'title', isUnique: isUniqueToDefaultDocuments},
       validation: (Rule) => Rule.required(),
     },
     {name: 'content', type: 'text'},
