@@ -24,7 +24,7 @@ const VariantSelector = React.forwardRef((props, ref) => {
     onFocus, // Method to handle focus state
     onBlur, // Method to handle blur state,
     onChange,
-    focusPath,
+    // focusPath,
   } = props
 
   const [details, setDetails] = useState(defaultDetails)

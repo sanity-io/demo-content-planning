@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-no-bind */
+import PropTypes from 'prop-types'
 import React, {useState, useEffect} from 'react'
 import {nanoid} from 'nanoid'
 import {FiGitBranch} from 'react-icons/fi'
@@ -97,4 +98,14 @@ export function CreateVariant({id, type, draft, published, onComplete}) {
     },
     icon: FiGitBranch,
   }
+}
+
+CreateVariant.propTypes = {
+  draft: PropTypes.object,
+  id: PropTypes.string,
+  onComplete: PropTypes.func,
+  published: PropTypes.shape({
+    variant: PropTypes.string,
+  }),
+  type: PropTypes.string,
 }

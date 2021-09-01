@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-no-bind */
+import PropTypes from 'prop-types'
 import React, {useState, useEffect, useMemo} from 'react'
 import {useDocumentOperation} from '@sanity/react-hooks'
 import {FiGitPullRequest} from 'react-icons/fi'
@@ -93,4 +94,14 @@ export function MergeVariant({id, type, draft, published, onComplete}) {
       onClose: () => onComplete(),
     },
   }
+}
+
+MergeVariant.propTypes = {
+  draft: PropTypes.object,
+  id: PropTypes.string,
+  onComplete: PropTypes.func,
+  published: PropTypes.shape({
+    _id: PropTypes.string,
+  }),
+  type: PropTypes.string,
 }
