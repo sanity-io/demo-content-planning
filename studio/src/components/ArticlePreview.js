@@ -3,7 +3,7 @@ import React from 'react'
 import {FiFileText} from 'react-icons/fi'
 import {Flex, Card} from '@sanity/ui'
 
-export default function ArticlePreview({_id = ``, live = false}) {
+export default function ArticlePreview({_id, live}) {
   return (
     <Card
       // eslint-disable-next-line no-nested-ternary
@@ -20,10 +20,11 @@ export default function ArticlePreview({_id = ``, live = false}) {
 }
 
 ArticlePreview.propTypes = {
-  _id: PropTypes.string.isRequired,
+  _id: PropTypes.string,
   live: PropTypes.bool,
 }
 
 ArticlePreview.defaultProps = {
+  _id: ``,
   live: false,
 }

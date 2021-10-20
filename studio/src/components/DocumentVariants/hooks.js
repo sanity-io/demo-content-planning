@@ -5,9 +5,18 @@ const client = sanityClient.withConfig({apiVersion: `2021-05-19`})
 
 export const useDocuments = (id, query) => {
   const [documents, setDocuments] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchDocuments = () => {
-    client.fetch(query).then((res) => setDocuments(res))
+    client
+      .fetch(query)
+      .then((res) => {
+        setDocuments(res)
+        setIsLoading(false)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   useEffect(() => {
@@ -27,5 +36,5 @@ export const useDocuments = (id, query) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return documents || []
+  return {isLoading, documents: documents || []}
 }

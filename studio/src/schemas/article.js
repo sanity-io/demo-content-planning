@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {FiFileText} from 'react-icons/fi'
-import client from 'part:@sanity/base/client'
+import sanityClient from 'part:@sanity/base/client'
 import {Stack, Label, Code} from '@sanity/ui'
 
 import Message from '../components/Message'
 import ArticlePreview from '../components/ArticlePreview'
 import DEFAULT_VARIANT from '../lib/defaultVariant'
+
+const client = sanityClient.withConfig({apiVersion: `2021-05-19`})
 
 export function isUniqueToDefaultDocuments(slug, options) {
   const {document} = options

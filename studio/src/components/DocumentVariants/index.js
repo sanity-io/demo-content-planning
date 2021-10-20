@@ -1,40 +1,50 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {IntentLink} from 'part:@sanity/base/router'
-import {Box, Text} from '@sanity/ui'
+import {Box, Flex, Spinner, Stack, Text} from '@sanity/ui'
+import Preview from 'part:@sanity/base/preview'
+import schema from 'part:@sanity/base/schema'
 
 import DEFAULT_VARIANT from '../../lib/defaultVariant'
-import styles from './index.module.css'
-import Preview from './Preview'
+import EditLink from '../EditLink'
+import Feedback from '../Feedback'
 import {useDocuments} from './hooks'
 
 function DocumentVariants({document: sanityDocument}) {
   const {published} = sanityDocument
   const mainId =
-    published?.branch === DEFAULT_VARIANT ? published?._id : published?._id.split('.').shift()
+    published?.variant === DEFAULT_VARIANT ? published?._id : published?._id.split('.').shift()
 
   const query = `*[_id in path("${mainId}.*") && variant != "${DEFAULT_VARIANT}"]`
-  const documents = useDocuments(mainId, query)
+  const {isLoading, documents} = useDocuments(mainId, query)
+
+  if (!published) {
+    return <Feedback>Document must be Published first before having Variants</Feedback>
+  }
+
+  if (isLoading) {
+    return (
+      <Box padding={4}>
+        <Flex align="center" justify="center">
+          <Spinner />
+        </Flex>
+      </Box>
+    )
+  }
 
   return (
-    <div>
-      {documents?.length > 0 ? (
-        documents.map((doc) => (
-          <IntentLink
-            key={doc._id}
-            className={styles.item}
-            intent="edit"
-            params={{id: doc._id, type: doc._type}}
-          >
-            <Preview id={doc._id} />
-          </IntentLink>
-        ))
-      ) : (
-        <Box padding={4}>
-          <Text>This document has no Variants</Text>
-        </Box>
-      )}
-    </div>
+    <Box padding={2}>
+      <Stack space={1}>
+        {documents?.length > 0 ? (
+          documents.map((doc) => (
+            <EditLink key={doc._id} id={doc._id} type={doc._type}>
+              <Preview value={doc} type={schema.get(doc._type)} />
+            </EditLink>
+          ))
+        ) : (
+          <Feedback>This document has no Variants</Feedback>
+        )}
+      </Stack>
+    </Box>
   )
 }
 
