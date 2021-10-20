@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {usePaneRouter} from '@sanity/desk-tool'
 import {Box, Button} from '@sanity/ui'

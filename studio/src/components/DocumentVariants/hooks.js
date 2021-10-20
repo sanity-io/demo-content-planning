@@ -15,6 +15,7 @@ export const useDocuments = (id, query) => {
         setIsLoading(false)
       })
       .catch((err) => {
+        // eslint-disable-next-line no-console
         console.log(err)
       })
   }

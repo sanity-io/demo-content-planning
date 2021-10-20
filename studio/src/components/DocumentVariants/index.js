@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Box, Flex, Spinner, Stack, Text} from '@sanity/ui'
+import {Box, Flex, Spinner, Stack} from '@sanity/ui'
 import Preview from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 

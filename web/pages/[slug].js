@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useMemo} from 'react'
-import ErrorPage from 'next/error'
-import {useRouter} from 'next/router'
+// import ErrorPage from 'next/error'
+// import {useRouter} from 'next/router'
 import {groq} from 'next-sanity'
 import {Listbox} from '@headlessui/react'
 import {nanoid} from 'nanoid'
@@ -21,7 +21,7 @@ const articleQuery = groq`
 `
 
 export default function Article({data, preview}) {
-  const router = useRouter()
+  // const router = useRouter()
 
   const {data: article} = usePreviewSubscription(articleQuery, {
     params: data?.queryParams,
