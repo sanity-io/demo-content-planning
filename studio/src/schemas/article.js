@@ -88,6 +88,17 @@ export default {
       validation: (Rule) => Rule.required(),
     },
     {name: 'content', type: 'text'},
+    {
+      name: 'pte',
+      title: 'PTE',
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+          styles: [{title: 'Pre', value: 'pre'}],
+        },
+      ],
+    },
   ],
   preview: {
     select: {

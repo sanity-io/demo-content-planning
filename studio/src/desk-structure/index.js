@@ -35,6 +35,6 @@ export default () => {
                 ])
             )
         ),
-      // S.documentTypeListItem('release').title('Releases'),
+      S.documentTypeListItem('release').title('Releases'),
     ])
 }
