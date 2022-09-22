@@ -15,7 +15,7 @@ export default function EditLink({id, type, children}) {
 
   return (
     <Button style={{width: `100%`}} mode="bleed" onClick={handleClick}>
-      <Box padding={2}>{children}</Box>
+      <Box>{children}</Box>
     </Button>
   )
 }

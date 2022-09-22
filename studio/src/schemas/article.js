@@ -22,7 +22,7 @@ export function isUniqueToDefaultDocuments(slug, options) {
   }
 
   const query = `!defined(*[
-    !(_id in [$draft, $published]) && 
+    !(_id in [$draft, $published] || (_id in path($published + ".**"))) && 
     _type == $type && 
     variant != ^.variant && 
     slug.current == $slug
@@ -88,17 +88,17 @@ export default {
       validation: (Rule) => Rule.required(),
     },
     {name: 'content', type: 'text'},
-    {
-      name: 'pte',
-      title: 'PTE',
-      type: 'array',
-      of: [
-        {
-          type: 'block',
-          styles: [{title: 'Pre', value: 'pre'}],
-        },
-      ],
-    },
+    // {
+    //   name: 'pte',
+    //   title: 'PTE',
+    //   type: 'array',
+    //   of: [
+    //     {
+    //       type: 'block',
+    //       styles: [{title: 'Pre', value: 'pre'}],
+    //     },
+    //   ],
+    // },
   ],
   preview: {
     select: {
